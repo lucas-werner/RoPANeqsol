@@ -1,0 +1,188 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RoPA Game</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Inter",sans-serif;background:#f4f7fa;color:#333;padding:20px;min-height:100vh;position:relative}
+    #logoLeft,#logoRight{position:fixed;top:20px;width:80px;opacity:.9;z-index:1000}
+    #logoLeft{left:20px}#logoRight{right:20px}
+    h1{text-align:center;font-weight:600;color:#1a202c;margin:60px 0 40px}
+    .scenario{background:#fff;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,.05);padding:20px;margin-bottom:30px}
+    .hidden{display:none}
+    h2{color:#2d3748;font-weight:600;margin-bottom:8px}
+    p{color:#4a5568;line-height:1.6;margin-bottom:20px}
+    table{width:100%;border-collapse:collapse;margin-bottom:20px}
+    th,td{border:1px solid #e2e8f0;padding:12px 10px;min-height:60px;text-align:center;vertical-align:middle}
+    th{background:#edf2f7;color:#2d3748;font-weight:600}
+    .dropzone{background:#fafafa;transition:background .3s}
+    .dropzone.blue{background:#bee3f8}.dropzone.red{background:#feb2b2}
+    .drag-container{display:flex;flex-wrap:wrap;gap:10px;padding:15px;background:#f7fafc;border:2px dashed #cbd5e0;border-radius:6px;min-height:100px}
+    .drag-item{background:#3182ce;color:#fff;padding:8px 12px;border-radius:20px;cursor:grab;font-size:14px;user-select:none;transition:transform .1s}
+    .drag-item:active{transform:scale(.95);opacity:.8}
+    #nextBtn{display:block;margin:0 auto 60px;padding:12px 24px;font-size:16px;background:#2b6cb0;color:#fff;border:none;border-radius:6px;cursor:pointer;transition:background .3s}
+    #nextBtn:hover{background:#2c5282}
+  </style>
+</head>
+<body>
+  <!-- Logos -->
+  <img id="logoLeft"  src="https://www.adfiz.nl/media/4184/dpo-logo-vierkant.jpg" alt="DPO logo">
+  <img id="logoRight" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcu6Z6Jlam0yLD96hF_kjUoImUcCequQZ8Kw&s" alt="game logo">
+
+  <h1>Building a RoPA – Drag & Drop Game</h1>
+
+  <!-- SCENARIO 1 -->
+  <div class="scenario" id="scenario1">
+    <h2>Scenario 1 – Payroll processing</h2>
+    <p>TechWorks BV processes employee data each month for payroll, tax filings and statutory reporting.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Department</th><th>Activity</th><th>Data subjects</th><th>Data categories</th><th>Purpose</th><th>Lawful basis (GDPR Art. 6)</th><th>Retention period</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="dropzone" data-col="department"></td>
+          <td class="dropzone" data-col="activity"></td>
+          <td class="dropzone" data-col="subjects"></td>
+          <td class="dropzone" data-col="categories"></td>
+          <td class="dropzone" data-col="purpose"></td>
+          <td class="dropzone" data-col="basis"></td>
+          <td class="dropzone" data-col="retention"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="drag-container" id="items1">
+      <div class="drag-item" draggable="true" data-col="department">Finance</div>
+      <div class="drag-item" draggable="true" data-col="activity">Salary calculation & payment</div>
+      <div class="drag-item" draggable="true" data-col="subjects">Employees</div>
+      <div class="drag-item" draggable="true" data-col="categories">Full name</div>
+      <div class="drag-item" draggable="true" data-col="categories">Bank account</div>
+      <div class="drag-item" draggable="true" data-col="categories">National ID / SSN</div>
+      <div class="drag-item" draggable="true" data-col="categories">Hours worked</div>
+      <div class="drag-item" draggable="true" data-col="categories">Tax status</div>
+      <div class="drag-item" draggable="true" data-col="purpose">Pay salaries & comply with tax law</div>
+      <div class="drag-item" draggable="true" data-col="basis">Contract (Art. 6 (1)(b))</div>
+      <div class="drag-item" draggable="true" data-col="basis">Legal obligation (Art. 6 (1)(c))</div>
+      <div class="drag-item" draggable="true" data-col="retention">7 years</div>
+    </div>
+  </div>
+
+  <!-- SCENARIO 2 -->
+  <div class="scenario hidden" id="scenario2">
+    <h2>Scenario 2 – Candidate applications</h2>
+    <p>NovaRecruit evaluates job candidates, keeps contact for interviews, and removes data after one year.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Department</th><th>Activity</th><th>Data subjects</th><th>Data categories</th><th>Purpose</th><th>Lawful basis (GDPR Art. 6)</th><th>Retention period</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="dropzone" data-col="department"></td>
+          <td class="dropzone" data-col="activity"></td>
+          <td class="dropzone" data-col="subjects"></td>
+          <td class="dropzone" data-col="categories"></td>
+          <td class="dropzone" data-col="purpose"></td>
+          <td class="dropzone" data-col="basis"></td>
+          <td class="dropzone" data-col="retention"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="drag-container" id="items2">
+      <div class="drag-item" draggable="true" data-col="department">HR</div>
+      <div class="drag-item" draggable="true" data-col="activity">Application review & shortlisting</div>
+      <div class="drag-item" draggable="true" data-col="subjects">Job candidates</div>
+      <div class="drag-item" draggable="true" data-col="categories">CV</div>
+      <div class="drag-item" draggable="true" data-col="categories">Cover letter</div>
+      <div class="drag-item" draggable="true" data-col="categories">References</div>
+      <div class="drag-item" draggable="true" data-col="categories">Contact details</div>
+      <div class="drag-item" draggable="true" data-col="purpose">Assess suitability & arrange interviews</div>
+      <div class="drag-item" draggable="true" data-col="basis">Legitimate interest (Art. 6 (1)(f))</div>
+      <div class="drag-item" draggable="true" data-col="basis">Consent (Art. 6 (1)(a))</div>
+      <div class="drag-item" draggable="true" data-col="retention">12 months</div>
+    </div>
+  </div>
+
+  <!-- SCENARIO 3 -->
+  <div class="scenario hidden" id="scenario3">
+    <h2>Scenario 3 – Cloud storage & logging</h2>
+    <p>DataSync Cloud BV stores client data, maintains backups and security logs to deliver the service and meet SLA requirements.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Department</th><th>Activity</th><th>Data subjects</th><th>Data categories</th><th>Purpose</th><th>Lawful basis (GDPR Art. 6)</th><th>Retention period</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="dropzone" data-col="department"></td>
+          <td class="dropzone" data-col="activity"></td>
+          <td class="dropzone" data-col="subjects"></td>
+          <td class="dropzone" data-col="categories"></td>
+          <td class="dropzone" data-col="purpose"></td>
+          <td class="dropzone" data-col="basis"></td>
+          <td class="dropzone" data-col="retention"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="drag-container" id="items3">
+      <div class="drag-item" draggable="true" data-col="department">Operations</div>
+      <div class="drag-item" draggable="true" data-col="activity">Encrypt & store files</div>
+      <div class="drag-item" draggable="true" data-col="activity">Create backups</div>
+      <div class="drag-item" draggable="true" data-col="activity">Monitor security events</div>
+      <div class="drag-item" draggable="true" data-col="subjects">Corporate clients</div>
+      <div class="drag-item" draggable="true" data-col="categories">Customer files</div>
+      <div class="drag-item" draggable="true" data-col="categories">Usage logs</div>
+      <div class="drag-item" draggable="true" data-col="categories">Backup snapshots</div>
+      <div class="drag-item" draggable="true" data-col="purpose">Provide cloud service & ensure security</div>
+      <div class="drag-item" draggable="true" data-col="basis">Contract (Art. 6 (1)(b))</div>
+      <div class="drag-item" draggable="true" data-col="basis">Legitimate interest (Art. 6 (1)(f))</div>
+      <div class="drag-item" draggable="true" data-col="retention">5 years</div>
+    </div>
+  </div>
+
+  <div id="navBtnWrap">
+    <button id="prevBtn" class="navBtn" disabled>Previous</button>
+    <button id="nextBtn" class="navBtn">Next</button>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    /* scenario navigation */
+   let current=1,total=3;
+    const showScenario=idx=>{
+      for(let i=1;i<=total;i++){
+        document.getElementById(`scenario${i}`).classList.toggle('hidden',i!==idx);
+      }
+      document.getElementById('prevBtn').disabled=idx===1;
+      document.getElementById('nextBtn').disabled=idx===total;
+      if(idx===total)document.getElementById('nextBtn').style.display='none';
+      else document.getElementById('nextBtn').style.display='inline-block';
+    };
+    document.getElementById('nextBtn').onclick=()=>{if(current<total){current++;showScenario(current);window.scrollTo(0,0);}};
+    document.getElementById('prevBtn').onclick=()=>{if(current>1){current--;showScenario(current);window.scrollTo(0,0);}};
+
+    /* drag & drop */
+    const makeDrag=el=>{el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',el.textContent);e.dataTransfer.setData('col',el.dataset.col);el.classList.add('dragging');});el.addEventListener('dragend',()=>el.classList.remove('dragging'));};
+    document.querySelectorAll('.drag-item').forEach(makeDrag);
+    document.querySelectorAll('.dropzone').forEach(zone=>{
+      zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('blue');});
+      zone.addEventListener('dragleave',()=>zone.classList.remove('blue'));
+      zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('blue');const txt=e.dataTransfer.getData('text/plain');const col=e.dataTransfer.getData('col');if(zone.dataset.col===col){const node=document.createElement('div');node.textContent=txt;node.className='drag-item';node.dataset.col=col;node.draggable=true;makeDrag(node);zone.appendChild(node);document.querySelector('.dragging')?.remove();}else{zone.classList.add('red');setTimeout(()=>zone.classList.remove('red'),500);}});
+    });
+
+    /* randomize drag items */
+    document.querySelectorAll('.drag-container').forEach(box=>{
+      const items=Array.from(box.children);
+      items.sort(()=>Math.random()-0.5).forEach(n=>box.appendChild(n));
+    });
+
+    showScenario(current);
+  </script>
+</body>
+</html>
