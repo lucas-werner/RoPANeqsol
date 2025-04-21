@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RoPA Game</title>
+  <title>RoPA Training Game</title>
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
     *{box-sizing:border-box;margin:0;padding:0}
@@ -13,174 +14,171 @@
     .scenario{background:#fff;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,.05);padding:20px;margin-bottom:30px}
     .hidden{display:none}
     h2{color:#2d3748;font-weight:600;margin-bottom:8px}
-    p{color:#4a5568;line-height:1.6;margin-bottom:20px}
+    p{color:#4a5568;line-height:1.6;margin-bottom:14px}
     table{width:100%;border-collapse:collapse;margin-bottom:20px}
     th,td{border:1px solid #e2e8f0;padding:12px 10px;min-height:60px;text-align:center;vertical-align:middle}
-    th{background:#edf2f7;color:#2d3748;font-weight:600}
+    th{background:#edf2f7;color:#2d3748;font-weight:600;position:relative}
+    .q{display:inline-block;background:#3182ce;color:#fff;border-radius:50%;width:18px;height:18px;line-height:18px;font-size:12px;text-align:center;margin-left:6px;cursor:help;position:relative}
+    .q:hover::after{content:attr(data-tip);position:absolute;bottom:-6px;left:50%;transform:translate(-50%,100%);background:#2d3748;color:#fff;padding:6px 8px;font-size:12px;border-radius:4px;white-space:nowrap;z-index:2000}
+    .q:hover::before{content:"";position:absolute;bottom:2px;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#2d3748;z-index:2000}
     .dropzone{background:#fafafa;transition:background .3s}
     .dropzone.blue{background:#bee3f8}.dropzone.red{background:#feb2b2}
     .drag-container{display:flex;flex-wrap:wrap;gap:10px;padding:15px;background:#f7fafc;border:2px dashed #cbd5e0;border-radius:6px;min-height:100px}
     .drag-item{background:#3182ce;color:#fff;padding:8px 12px;border-radius:20px;cursor:grab;font-size:14px;user-select:none;transition:transform .1s}
     .drag-item:active{transform:scale(.95);opacity:.8}
-    #nextBtn{display:block;margin:0 auto 60px;padding:12px 24px;font-size:16px;background:#2b6cb0;color:#fff;border:none;border-radius:6px;cursor:pointer;transition:background .3s}
-    #nextBtn:hover{background:#2c5282}
+    input.answer{width:100%;border:none;background:#f0f4f8;height:100%;padding:6px;text-align:center}
+    .answerKey{margin-top:20px}
+    #navBtnWrap{display:flex;justify-content:center;gap:20px;margin:40px 0}
+    .navBtn{padding:12px 24px;font-size:16px;background:#2b6cb0;color:#fff;border:none;border-radius:6px;cursor:pointer;transition:background .3s}
+    .navBtn:hover{background:#2c5282}.navBtn:disabled{background:#a0aec0;cursor:not-allowed}
   </style>
 </head>
 <body>
-  <!-- Logos -->
-  <img id="logoLeft"  src="https://www.adfiz.nl/media/4184/dpo-logo-vierkant.jpg" alt="DPO logo">
-  <img id="logoRight" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcu6Z6Jlam0yLD96hF_kjUoImUcCequQZ8Kw&s" alt="game logo">
 
-  <h1>Building a RoPA – Drag & Drop Game</h1>
 
-  <!-- SCENARIO 1 -->
-  <div class="scenario" id="scenario1">
-    <h2>Scenario 1 – Payroll processing</h2>
-    <p>TechWorks BV processes employee data each month for payroll, tax filings and statutory reporting.</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Department</th><th>Activity</th><th>Data subjects</th><th>Data categories</th><th>Purpose</th><th>Lawful basis (GDPR Art. 6)</th><th>Retention period</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="dropzone" data-col="department"></td>
-          <td class="dropzone" data-col="activity"></td>
-          <td class="dropzone" data-col="subjects"></td>
-          <td class="dropzone" data-col="categories"></td>
-          <td class="dropzone" data-col="purpose"></td>
-          <td class="dropzone" data-col="basis"></td>
-          <td class="dropzone" data-col="retention"></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="drag-container" id="items1">
-      <div class="drag-item" draggable="true" data-col="department">Finance</div>
-      <div class="drag-item" draggable="true" data-col="activity">Salary calculation & payment</div>
-      <div class="drag-item" draggable="true" data-col="subjects">Employees</div>
-      <div class="drag-item" draggable="true" data-col="categories">Full name</div>
-      <div class="drag-item" draggable="true" data-col="categories">Bank account</div>
-      <div class="drag-item" draggable="true" data-col="categories">National ID / SSN</div>
-      <div class="drag-item" draggable="true" data-col="categories">Hours worked</div>
-      <div class="drag-item" draggable="true" data-col="categories">Tax status</div>
-      <div class="drag-item" draggable="true" data-col="purpose">Pay salaries & comply with tax law</div>
-      <div class="drag-item" draggable="true" data-col="basis">Contract (Art. 6 (1)(b))</div>
-      <div class="drag-item" draggable="true" data-col="basis">Legal obligation (Art. 6 (1)(c))</div>
-      <div class="drag-item" draggable="true" data-col="retention">7 years</div>
-    </div>
-  </div>
+  <h1>RoPA Practice </h1>
 
-  <!-- SCENARIO 2 -->
-  <div class="scenario hidden" id="scenario2">
-    <h2>Scenario 2 – Candidate applications</h2>
-    <p>NovaRecruit evaluates job candidates, keeps contact for interviews, and removes data after one year.</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Department</th><th>Activity</th><th>Data subjects</th><th>Data categories</th><th>Purpose</th><th>Lawful basis (GDPR Art. 6)</th><th>Retention period</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="dropzone" data-col="department"></td>
-          <td class="dropzone" data-col="activity"></td>
-          <td class="dropzone" data-col="subjects"></td>
-          <td class="dropzone" data-col="categories"></td>
-          <td class="dropzone" data-col="purpose"></td>
-          <td class="dropzone" data-col="basis"></td>
-          <td class="dropzone" data-col="retention"></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="drag-container" id="items2">
-      <div class="drag-item" draggable="true" data-col="department">HR</div>
-      <div class="drag-item" draggable="true" data-col="activity">Application review & shortlisting</div>
-      <div class="drag-item" draggable="true" data-col="subjects">Job candidates</div>
-      <div class="drag-item" draggable="true" data-col="categories">CV</div>
-      <div class="drag-item" draggable="true" data-col="categories">Cover letter</div>
-      <div class="drag-item" draggable="true" data-col="categories">References</div>
-      <div class="drag-item" draggable="true" data-col="categories">Contact details</div>
-      <div class="drag-item" draggable="true" data-col="purpose">Assess suitability & arrange interviews</div>
-      <div class="drag-item" draggable="true" data-col="basis">Legitimate interest (Art. 6 (1)(f))</div>
-      <div class="drag-item" draggable="true" data-col="basis">Consent (Art. 6 (1)(a))</div>
-      <div class="drag-item" draggable="true" data-col="retention">12 months</div>
-    </div>
-  </div>
+  <!-- Table header template with tooltips -->
+  <template id="theadTpl">
+    <thead><tr>
+      <th>Department<span class="q" data-tip="Business unit responsible">?</span></th>
+      <th>Activity<span class="q" data-tip="Specific processing operation">?</span></th>
+      <th>Data subjects<span class="q" data-tip="Whose personal data is processed">?</span></th>
+      <th>Data categories<span class="q" data-tip="Types of personal data">?</span></th>
+      <th>Purpose<span class="q" data-tip="Why the data is processed">?</span></th>
+      <th>Lawful basis<span class="q" data-tip="GDPR Art.6 ground">?</span></th>
+      <th>Retention<span class="q" data-tip="Storage period">?</span></th>
+    </tr></thead>
+  </template>
 
-  <!-- SCENARIO 3 -->
-  <div class="scenario hidden" id="scenario3">
-    <h2>Scenario 3 – Cloud storage & logging</h2>
-    <p>DataSync Cloud BV stores client data, maintains backups and security logs to deliver the service and meet SLA requirements.</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Department</th><th>Activity</th><th>Data subjects</th><th>Data categories</th><th>Purpose</th><th>Lawful basis (GDPR Art. 6)</th><th>Retention period</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="dropzone" data-col="department"></td>
-          <td class="dropzone" data-col="activity"></td>
-          <td class="dropzone" data-col="subjects"></td>
-          <td class="dropzone" data-col="categories"></td>
-          <td class="dropzone" data-col="purpose"></td>
-          <td class="dropzone" data-col="basis"></td>
-          <td class="dropzone" data-col="retention"></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="drag-container" id="items3">
-      <div class="drag-item" draggable="true" data-col="department">Operations</div>
-      <div class="drag-item" draggable="true" data-col="activity">Encrypt & store files</div>
-      <div class="drag-item" draggable="true" data-col="activity">Create backups</div>
-      <div class="drag-item" draggable="true" data-col="activity">Monitor security events</div>
-      <div class="drag-item" draggable="true" data-col="subjects">Corporate clients</div>
-      <div class="drag-item" draggable="true" data-col="categories">Customer files</div>
-      <div class="drag-item" draggable="true" data-col="categories">Usage logs</div>
-      <div class="drag-item" draggable="true" data-col="categories">Backup snapshots</div>
-      <div class="drag-item" draggable="true" data-col="purpose">Provide cloud service & ensure security</div>
-      <div class="drag-item" draggable="true" data-col="basis">Contract (Art. 6 (1)(b))</div>
-      <div class="drag-item" draggable="true" data-col="basis">Legitimate interest (Art. 6 (1)(f))</div>
-      <div class="drag-item" draggable="true" data-col="retention">5 years</div>
-    </div>
-  </div>
+  <div id="scenarioContainer"></div>
 
   <div id="navBtnWrap">
-    <button id="prevBtn" class="navBtn" disabled>Previous</button>
+    <button id="prevBtn" class="navBtn">Previous</button>
     <button id="nextBtn" class="navBtn">Next</button>
   </div>
 
-  <!-- SCRIPTS -->
   <script>
-    /* scenario navigation */
-   let current=1,total=3;
-    const showScenario=idx=>{
-      for(let i=1;i<=total;i++){
-        document.getElementById(`scenario${i}`).classList.toggle('hidden',i!==idx);
-      }
-      document.getElementById('prevBtn').disabled=idx===1;
-      document.getElementById('nextBtn').disabled=idx===total;
-      if(idx===total)document.getElementById('nextBtn').style.display='none';
-      else document.getElementById('nextBtn').style.display='inline-block';
-    };
-    document.getElementById('nextBtn').onclick=()=>{if(current<total){current++;showScenario(current);window.scrollTo(0,0);}};
-    document.getElementById('prevBtn').onclick=()=>{if(current>1){current--;showScenario(current);window.scrollTo(0,0);}};
+    /* ---------- Scenario data ---------- */
+    const scenarios=[
+      {type:'drag',title:'Salary payment',story:[
+        'Finance runs payroll in <b>Workday</b>. After approving timesheets, a SEPA batch is uploaded to the bank portal for next‑day payment.',
+        'The same dataset feeds payroll‑tax declarations. Dutch tax law requires records to be kept for up to seven years.'
+      ],entries:{department:'HR',activity:'Salary payment',subjects:'Employees',categories:'Name, address, bank details, salary',purpose:'Pay employees',basis:'Contract (Art.6 (1)(b))',retention:'5–7 years'}},
+      {type:'drag',title:'Applicant process',story:[
+        'Applications arrive via <b>Microsoft Outlook</b> and are imported into <b>Greenhouse</b>. Recruiters add interview notes and test scores.',
+        'Profiles of rejected candidates are deleted after four weeks, unless the applicant consents to stay in the talent pool for one year.'
+      ],entries:{department:'HR',activity:'Applicant process',subjects:'Applicants',categories:'Contact details, CV, interview notes',purpose:'Hire staff',basis:'Contract (Art.6 (1)(b))',retention:'4 wks / 1 yr (consent)'}},
+      {type:'drag',title:'Personnel file management',story:[
+        '<b>SAP SuccessFactors</b> stores contracts, ID scans and annual reviews. Managers upload ratings each April.',
+        'Files are kept two years after termination; ID scans five years to satisfy audit rules.'
+      ],entries:{department:'HR',activity:'Personnel file management',subjects:'Employees',categories:'ID, contracts, reviews',purpose:'Employment administration',basis:'Contract (Art.6 (1)(b))',retention:'2 yrs / 5 yrs ID'}},
+      {type:'drag',title:'Employee satisfaction surveys',story:[
+        'Quarterly pulse surveys are deployed via <b>Qualtrics</b>. Results feed an anonymised dashboard for executives.',
+        'Raw responses are deleted after reporting; aggregated trends are retained two years to measure progress.'
+      ],entries:{department:'HR',activity:'Satisfaction surveys',subjects:'Employees',categories:'Survey responses, click data',purpose:'Measure engagement',basis:'Legitimate interest (Art.6 (1)(f))',retention:'2 years'}},
+      {type:'drag',title:'Leave registration',story:[
+        'Employees request holiday or parental leave in <b>Workday</b>. Approved leave balances sync to payroll.',
+        'Leave records are stored for two years after contract end in case of entitlement disputes.'
+      ],entries:{department:'HR',activity:'Leave registration',subjects:'Employees',categories:'Leave type, days taken, balance',purpose:'Track leave',basis:'Contract (Art.6 (1)(b))',retention:'2 yrs post‑contract'}},
+      {type:'input',title:'Challenge: Do it yourself',story:[
+        'When an employee calls in sick, HR logs the absence in Workday and shares minimal data with an external occupational‑health service provider.',
+        'Only name, contact details and sick‑leave duration are shared. Under Dutch law the company keeps these records two years after employment ends.'
+      ],correct:{department:'HR',activity:'Sick leave registration',subjects:'Employees',categories:'Name, sick‑leave days, contact details',purpose:'Refer employee to occupational‑health provider & manage absence',basis:'Legal obligation (Art.6 (1)(c))',retention:'2 yrs post‑contract'}}
+    ];
 
-    /* drag & drop */
-    const makeDrag=el=>{el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',el.textContent);e.dataTransfer.setData('col',el.dataset.col);el.classList.add('dragging');});el.addEventListener('dragend',()=>el.classList.remove('dragging'));};
-    document.querySelectorAll('.drag-item').forEach(makeDrag);
+    /* ---------- Build HTML for each scenario ---------- */
+    const container=document.getElementById('scenarioContainer');
+
+    scenarios.forEach((sc,idx)=>{
+      const scenIdx=idx+1;
+      const wrapper=document.createElement('div');wrapper.className='scenario';wrapper.id=`scenario${scenIdx}`;
+      wrapper.innerHTML=`<h2>Scenario ${scenIdx} – ${sc.title}</h2>`+sc.story.map(p=>`<p>${p}</p>`).join('');
+
+      if(sc.type==='drag'){
+        // table + drag chips
+        wrapper.innerHTML+=`<table></table><div class="drag-container" id="chips${scenIdx}"></div>`;
+        container.appendChild(wrapper);
+        const table=wrapper.querySelector('table');
+        table.appendChild(document.importNode(document.getElementById('theadTpl').content,true));
+        const tr=document.createElement('tr');
+        ['department','activity','subjects','categories','purpose','basis','retention'].forEach(col=>{
+          const td=document.createElement('td');td.className='dropzone';td.dataset.col=col;tr.appendChild(td);
+        });
+        table.appendChild(document.createElement('tbody')).appendChild(tr);
+        Object.entries(sc.entries).forEach(([col,text])=>{
+          const chip=document.createElement('div');chip.className='drag-item';chip.draggable=true;chip.dataset.col=col;chip.textContent=text;wrapper.querySelector('.drag-container').appendChild(chip);
+        });
+      }else{
+        // free‑input table
+        wrapper.innerHTML+=`<table></table><button class="navBtn" id="check${scenIdx}">Check answers</button><div class="answerKey" id="key${scenIdx}"></div>`;
+        container.appendChild(wrapper);
+        const table=wrapper.querySelector('table');table.appendChild(document.importNode(document.getElementById('theadTpl').content,true));
+        const tr=document.createElement('tr');
+        ['department','activity','subjects','categories','purpose','basis','retention'].forEach(col=>{
+          const td=document.createElement('td');td.innerHTML=`<input class='answer' id='${col}${scenIdx}'>`;tr.appendChild(td);
+        });
+        table.appendChild(document.createElement('tbody')).appendChild(tr);
+        // button action
+        wrapper.querySelector(`#check${scenIdx}`).onclick=()=>{
+          const key=sc.correct;
+          let html='<h3>Suggested answer</h3><ul>';
+          Object.entries(key).forEach(([k,v])=>{html+=`<li><b>${k.charAt(0).toUpperCase()+k.slice(1)}:</b> ${v}</li>`});
+          html+='</ul>';
+          const box=wrapper.querySelector(`#key${scenIdx}`);
+          box.innerHTML=html;box.classList.remove('hidden');
+        };
+      }
+    });
+
+    /* ---------- Shuffle drag chips ---------- */
+    document.querySelectorAll('.drag-container').forEach(box=>{
+      [...box.children].sort(()=>Math.random()-.5).forEach(el=>box.appendChild(el));
+    });
+
+    /* ---------- Drag & drop behaviour ---------- */
+    const makeDraggable=el=>{
+      el.addEventListener('dragstart',e=>{
+        e.dataTransfer.setData('text',el.textContent);
+        e.dataTransfer.setData('col',el.dataset.col);
+        el.classList.add('dragging');
+      });
+      el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    };
+    document.querySelectorAll('.drag-item').forEach(makeDraggable);
+
     document.querySelectorAll('.dropzone').forEach(zone=>{
       zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('blue');});
       zone.addEventListener('dragleave',()=>zone.classList.remove('blue'));
-      zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('blue');const txt=e.dataTransfer.getData('text/plain');const col=e.dataTransfer.getData('col');if(zone.dataset.col===col){const node=document.createElement('div');node.textContent=txt;node.className='drag-item';node.dataset.col=col;node.draggable=true;makeDrag(node);zone.appendChild(node);document.querySelector('.dragging')?.remove();}else{zone.classList.add('red');setTimeout(()=>zone.classList.remove('red'),500);}});
+      zone.addEventListener('drop',e=>{
+        e.preventDefault();zone.classList.remove('blue');
+        const text=e.dataTransfer.getData('text');
+        const col=e.dataTransfer.getData('col');
+        if(zone.dataset.col===col){
+          const newChip=document.createElement('div');newChip.className='drag-item';newChip.draggable=true;newChip.dataset.col=col;newChip.textContent=text;makeDraggable(newChip);
+          zone.appendChild(newChip);
+          document.querySelector('.dragging')?.remove();
+        }else{
+          zone.classList.add('red');setTimeout(()=>zone.classList.remove('red'),500);
+        }
+      });
     });
 
-    /* randomize drag items */
-    document.querySelectorAll('.drag-container').forEach(box=>{
-      const items=Array.from(box.children);
-      items.sort(()=>Math.random()-0.5).forEach(n=>box.appendChild(n));
-    });
+    /* ---------- Navigation ---------- */
+    let current=1,total=scenarios.length;
+    const prevBtn=document.getElementById('prevBtn');
+    const nextBtn=document.getElementById('nextBtn');
+
+    const showScenario=index=>{
+      for(let i=1;i<=total;i++){
+        document.getElementById(`scenario${i}`).classList.toggle('hidden',i!==index);
+      }
+      prevBtn.disabled=index===1;
+      nextBtn.disabled=index===total;
+    };
+
+    prevBtn.onclick=()=>{if(current>1){current--;showScenario(current);window.scrollTo({top:0,behavior:'smooth'});}};
+    nextBtn.onclick=()=>{if(current<total){current++;showScenario(current);window.scrollTo({top:0,behavior:'smooth'});}};
 
     showScenario(current);
   </script>
