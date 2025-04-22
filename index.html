@@ -27,25 +27,28 @@
     .drag-item{background:#3182ce;color:#fff;padding:8px 12px;border-radius:20px;cursor:grab;font-size:14px;user-select:none;transition:transform .1s}
     .drag-item:active{transform:scale(.95);opacity:.8}
     input.answer{width:100%;border:none;background:#f0f4f8;height:100%;padding:6px;text-align:center}
-    .answerKey{margin-top:20px}
+    .answerKey{display:none;margin-top:20px}
     #navBtnWrap{display:flex;justify-content:center;gap:20px;margin:40px 0}
     .navBtn{padding:12px 24px;font-size:16px;background:#2b6cb0;color:#fff;border:none;border-radius:6px;cursor:pointer;transition:background .3s}
     .navBtn:hover{background:#2c5282}.navBtn:disabled{background:#a0aec0;cursor:not-allowed}
   </style>
 </head>
 <body>
+  <img id="logoLeft" src="https://www.adfiz.nl/media/4184/dpo-logo-vierkant.jpg" alt="DPO logo" />
+  <img id="logoRight" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcu6Z6Jlam0yLD96hF_kjUoImUcCequQZ8Kw&s" alt="Game logo" />
 
+  <h1>RoPA Practice – Payroll & HR Scenarios</h1>
 
-  <h1>RoPA Practice </h1>
-
-  <!-- Table header template with tooltips -->
+  <!-- Header template with System and Security measures -->
   <template id="theadTpl">
     <thead><tr>
-      <th>Department<span class="q" data-tip="Business unit responsible">?</span></th>
-      <th>Activity<span class="q" data-tip="Specific processing operation">?</span></th>
-      <th>Data subjects<span class="q" data-tip="Whose personal data is processed">?</span></th>
-      <th>Data categories<span class="q" data-tip="Types of personal data">?</span></th>
-      <th>Purpose<span class="q" data-tip="Why the data is processed">?</span></th>
+      <th>Department<span class="q" data-tip="Business unit">?</span></th>
+      <th>Activity<span class="q" data-tip="Processing operation">?</span></th>
+      <th>Data subjects<span class="q" data-tip="Whose data">?</span></th>
+      <th>Data categories<span class="q" data-tip="Data types">?</span></th>
+      <th>Purpose<span class="q" data-tip="Why processing">?</span></th>
+      <th>System<span class="q" data-tip="Primary IT system">?</span></th>
+      <th>Security measures<span class="q" data-tip="Key controls">?</span></th>
       <th>Lawful basis<span class="q" data-tip="GDPR Art.6 ground">?</span></th>
       <th>Retention<span class="q" data-tip="Storage period">?</span></th>
     </tr></thead>
@@ -59,128 +62,78 @@
   </div>
 
   <script>
-    /* ---------- Scenario data ---------- */
+    /* --- Scenario data --- */
     const scenarios=[
       {type:'drag',title:'Salary payment',story:[
-        'Finance runs payroll in <b>Workday</b>. After approving timesheets, a SEPA batch is uploaded to the bank portal for next‑day payment.',
-        'The same dataset feeds payroll‑tax declarations. Dutch tax law requires records to be kept for up to seven years.'
-      ],entries:{department:'HR',activity:'Salary payment',subjects:'Employees',categories:'Name, address, bank details, salary',purpose:'Pay employees',basis:'Contract (Art.6 (1)(b))',retention:'5–7 years'}},
+        'Finance uses <b>Workday</b> to calculate salaries. After approval a SEPA file is sent to the bank.',
+        'The same dataset feeds tax filings. Records are kept up to seven years under national tax law.'
+      ],entries:{department:'HR',activity:'Salary payment',subjects:'Employees',categories:'Name, address, bank details, salary',purpose:'Pay employees',system:'Workday',security:'Role‑based access, MFA, encrypted backups',basis:'Contract (Art.6 (1)(b))',retention:'5–7 years'}},
       {type:'drag',title:'Applicant process',story:[
-        'Applications arrive via <b>Microsoft Outlook</b> and are imported into <b>Greenhouse</b>. Recruiters add interview notes and test scores.',
-        'Profiles of rejected candidates are deleted after four weeks, unless the applicant consents to stay in the talent pool for one year.'
-      ],entries:{department:'HR',activity:'Applicant process',subjects:'Applicants',categories:'Contact details, CV, interview notes',purpose:'Hire staff',basis:'Contract (Art.6 (1)(b))',retention:'4 wks / 1 yr (consent)'}},
+        'Applications land in <b>Outlook</b> and flow into <b>Greenhouse</b>. Recruiters record interview scores.',
+        'Rejected candidates are deleted after four weeks unless consent to keep data one year is given.'
+      ],entries:{department:'HR',activity:'Applicant process',subjects:'Applicants',categories:'Contact details, CV, interview notes',purpose:'Recruit staff',system:'Greenhouse',security:'SSO, encrypted database',basis:'Contract (Art.6 (1)(b))',retention:'4 wks / 1 yr (consent)'}},
       {type:'drag',title:'Personnel file management',story:[
-        '<b>SAP SuccessFactors</b> stores contracts, ID scans and annual reviews. Managers upload ratings each April.',
-        'Files are kept two years after termination; ID scans five years to satisfy audit rules.'
-      ],entries:{department:'HR',activity:'Personnel file management',subjects:'Employees',categories:'ID, contracts, reviews',purpose:'Employment administration',basis:'Contract (Art.6 (1)(b))',retention:'2 yrs / 5 yrs ID'}},
+        '<b>SAP SuccessFactors</b> stores contracts and reviews. Managers add ratings annually.',
+        'Files are kept two years post‑employment; ID copies five years for audits.'
+      ],entries:{department:'HR',activity:'Personnel file management',subjects:'Employees',categories:'ID, contracts, reviews',purpose:'Employment admin',system:'SAP SuccessFactors',security:'Audit logs, TLS',basis:'Contract (Art.6 (1)(b))',retention:'2 yrs / 5 yrs ID'}},
       {type:'drag',title:'Employee satisfaction surveys',story:[
-        'Quarterly pulse surveys are deployed via <b>Qualtrics</b>. Results feed an anonymised dashboard for executives.',
-        'Raw responses are deleted after reporting; aggregated trends are retained two years to measure progress.'
-      ],entries:{department:'HR',activity:'Satisfaction surveys',subjects:'Employees',categories:'Survey responses, click data',purpose:'Measure engagement',basis:'Legitimate interest (Art.6 (1)(f))',retention:'2 years'}},
+        'Quarterly surveys via <b>Qualtrics</b> capture engagement metrics.',
+        'Raw answers are deleted after reporting; aggregated trends kept two years.'
+      ],entries:{department:'HR',activity:'Satisfaction surveys',subjects:'Employees',categories:'Survey responses, click data',purpose:'Measure engagement',system:'Qualtrics',security:'HTTPS, anonymisation',basis:'Legitimate interest (Art.6 (1)(f))',retention:'2 years'}},
       {type:'drag',title:'Leave registration',story:[
-        'Employees request holiday or parental leave in <b>Workday</b>. Approved leave balances sync to payroll.',
-        'Leave records are stored for two years after contract end in case of entitlement disputes.'
-      ],entries:{department:'HR',activity:'Leave registration',subjects:'Employees',categories:'Leave type, days taken, balance',purpose:'Track leave',basis:'Contract (Art.6 (1)(b))',retention:'2 yrs post‑contract'}},
-      {type:'input',title:'Challenge: Do it yourself',story:[
-        'When an employee calls in sick, HR logs the absence in Workday and shares minimal data with an external occupational‑health service provider.',
-        'Only name, contact details and sick‑leave duration are shared. Under Dutch law the company keeps these records two years after employment ends.'
-      ],correct:{department:'HR',activity:'Sick leave registration',subjects:'Employees',categories:'Name, sick‑leave days, contact details',purpose:'Refer employee to occupational‑health provider & manage absence',basis:'Legal obligation (Art.6 (1)(c))',retention:'2 yrs post‑contract'}}
+        'Employees request leave in <b>Workday</b>. Balances sync to payroll.',
+        'Leave data is stored two years after contract for dispute handling.'
+      ],entries:{department:'HR',activity:'Leave registration',subjects:'Employees',categories:'Leave type, days, balance',purpose:'Track leave',system:'Workday',security:'HR role access',basis:'Contract (Art.6 (1)(b))',retention:'2 yrs post‑contract'}},
+      {type:'input',title:'Sick leave registration',story:[
+        'HR logs sick leave in Workday and sends required details to an external occupational‑health platform.',
+        'Minimal data (name, contact, duration) is shared. Records retained two years after employment.'
+      ],correct:{department:'HR',activity:'Sick leave registration',subjects:'Employees',categories:'Name, sick‑leave days, contact details',purpose:'Manage absence & OH referral',system:'Workday + OH portal',security:'TLS transfer, restricted HR access',basis:'Legal obligation (Art.6 (1)(c))',retention:'2 yrs post‑contract'}}
     ];
 
-    /* ---------- Build HTML for each scenario ---------- */
+    const cols=['department','activity','subjects','categories','purpose','system','security','basis','retention'];
     const container=document.getElementById('scenarioContainer');
 
+    /* --- Build scenarios --- */
     scenarios.forEach((sc,idx)=>{
-      const scenIdx=idx+1;
-      const wrapper=document.createElement('div');wrapper.className='scenario';wrapper.id=`scenario${scenIdx}`;
-      wrapper.innerHTML=`<h2>Scenario ${scenIdx} – ${sc.title}</h2>`+sc.story.map(p=>`<p>${p}</p>`).join('');
+      const i=idx+1;
+      const block=document.createElement('div');block.className='scenario';block.id=`scenario${i}`;
+      block.innerHTML=`<h2>Scenario ${i} – ${sc.title}</h2>`+sc.story.map(p=>`<p>${p}</p>`).join('');
 
       if(sc.type==='drag'){
-        // table + drag chips
-        wrapper.innerHTML+=`<table></table><div class="drag-container" id="chips${scenIdx}"></div>`;
-        container.appendChild(wrapper);
-        const table=wrapper.querySelector('table');
-        table.appendChild(document.importNode(document.getElementById('theadTpl').content,true));
-        const tr=document.createElement('tr');
-        ['department','activity','subjects','categories','purpose','basis','retention'].forEach(col=>{
-          const td=document.createElement('td');td.className='dropzone';td.dataset.col=col;tr.appendChild(td);
-        });
-        table.appendChild(document.createElement('tbody')).appendChild(tr);
-        Object.entries(sc.entries).forEach(([col,text])=>{
-          const chip=document.createElement('div');chip.className='drag-item';chip.draggable=true;chip.dataset.col=col;chip.textContent=text;wrapper.querySelector('.drag-container').appendChild(chip);
-        });
+        block.innerHTML+=`<table></table><div class='drag-container'></div>`;
+        container.appendChild(block);
+        const tbl=block.querySelector('table');tbl.appendChild(document.importNode(document.getElementById('theadTpl').content,true));
+        const tr=document.createElement('tr');cols.forEach(c=>{const td=document.createElement('td');td.className='dropzone';td.dataset.col=c;tr.appendChild(td);});
+        tbl.appendChild(document.createElement('tbody')).appendChild(tr);
+        const dragBox=block.querySelector('.drag-container');
+        Object.entries(sc.entries).forEach(([c,v])=>{const chip=document.createElement('div');chip.className='drag-item';chip.draggable=true;chip.dataset.col=c;chip.textContent=v;dragBox.appendChild(chip);});
       }else{
-        // free‑input table
-        wrapper.innerHTML+=`<table></table><button class="navBtn" id="check${scenIdx}">Check answers</button><div class="answerKey" id="key${scenIdx}"></div>`;
-        container.appendChild(wrapper);
-        const table=wrapper.querySelector('table');table.appendChild(document.importNode(document.getElementById('theadTpl').content,true));
-        const tr=document.createElement('tr');
-        ['department','activity','subjects','categories','purpose','basis','retention'].forEach(col=>{
-          const td=document.createElement('td');td.innerHTML=`<input class='answer' id='${col}${scenIdx}'>`;tr.appendChild(td);
-        });
-        table.appendChild(document.createElement('tbody')).appendChild(tr);
-        // button action
-        wrapper.querySelector(`#check${scenIdx}`).onclick=()=>{
-          const key=sc.correct;
-          let html='<h3>Suggested answer</h3><ul>';
-          Object.entries(key).forEach(([k,v])=>{html+=`<li><b>${k.charAt(0).toUpperCase()+k.slice(1)}:</b> ${v}</li>`});
-          html+='</ul>';
-          const box=wrapper.querySelector(`#key${scenIdx}`);
-          box.innerHTML=html;box.classList.remove('hidden');
-        };
+        block.innerHTML+=`<table></table><button class='navBtn' id='check${i}'>Check answers</button><div class='answerKey' id='key${i}'></div>`;
+        container.appendChild(block);
+        const tbl=block.querySelector('table');tbl.appendChild(document.importNode(document.getElementById('theadTpl').content,true));
+        const tr=document.createElement('tr');cols.forEach(c=>{const td=document.createElement('td');td.innerHTML=`<input class='answer' id='${c}${i}'>`;tr.appendChild(td);});
+        tbl.appendChild(document.createElement('tbody')).appendChild(tr);
+        block.querySelector(`#check${i}`).onclick=()=>{const key=sc.correct;let html='<h3>Suggested answer</h3><ul>';Object.entries(key).forEach(([k,v])=>html+=`<li><b>${k.charAt(0).toUpperCase()+k.slice(1)}:</b> ${v}</li>`);html+='</ul>';block.querySelector(`#key${i}`).innerHTML=html;block.querySelector(`#key${i}`).style.display='block';};
       }
     });
 
-    /* ---------- Shuffle drag chips ---------- */
-    document.querySelectorAll('.drag-container').forEach(box=>{
-      [...box.children].sort(()=>Math.random()-.5).forEach(el=>box.appendChild(el));
-    });
-
-    /* ---------- Drag & drop behaviour ---------- */
-    const makeDraggable=el=>{
-      el.addEventListener('dragstart',e=>{
-        e.dataTransfer.setData('text',el.textContent);
-        e.dataTransfer.setData('col',el.dataset.col);
-        el.classList.add('dragging');
-      });
-      el.addEventListener('dragend',()=>el.classList.remove('dragging'));
-    };
-    document.querySelectorAll('.drag-item').forEach(makeDraggable);
+    /* --- Shuffle chips & make draggable --- */
+    document.querySelectorAll('.drag-container').forEach(box=>[...box.children].sort(()=>Math.random()-.5).forEach(n=>box.appendChild(n)));
+    const makeDrag=el=>{el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text',el.textContent);e.dataTransfer.setData('col',el.dataset.col);el.classList.add('dragging');});el.addEventListener('dragend',()=>el.classList.remove('dragging'));};
+    document.querySelectorAll('.drag-item').forEach(makeDrag);
 
     document.querySelectorAll('.dropzone').forEach(zone=>{
       zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('blue');});
       zone.addEventListener('dragleave',()=>zone.classList.remove('blue'));
-      zone.addEventListener('drop',e=>{
-        e.preventDefault();zone.classList.remove('blue');
-        const text=e.dataTransfer.getData('text');
-        const col=e.dataTransfer.getData('col');
-        if(zone.dataset.col===col){
-          const newChip=document.createElement('div');newChip.className='drag-item';newChip.draggable=true;newChip.dataset.col=col;newChip.textContent=text;makeDraggable(newChip);
-          zone.appendChild(newChip);
-          document.querySelector('.dragging')?.remove();
-        }else{
-          zone.classList.add('red');setTimeout(()=>zone.classList.remove('red'),500);
-        }
-      });
+      zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('blue');const txt=e.dataTransfer.getData('text');const col=e.dataTransfer.getData('col');if(zone.dataset.col===col){const chip=document.createElement('div');chip.className='drag-item';chip.draggable=true;chip.dataset.col=col;chip.textContent=txt;makeDrag(chip);zone.appendChild(chip);document.querySelector('.dragging')?.remove();}else{zone.classList.add('red');setTimeout(()=>zone.classList.remove('red'),500);}});
     });
 
-    /* ---------- Navigation ---------- */
-    let current=1,total=scenarios.length;
-    const prevBtn=document.getElementById('prevBtn');
-    const nextBtn=document.getElementById('nextBtn');
-
-    const showScenario=index=>{
-      for(let i=1;i<=total;i++){
-        document.getElementById(`scenario${i}`).classList.toggle('hidden',i!==index);
-      }
-      prevBtn.disabled=index===1;
-      nextBtn.disabled=index===total;
-    };
-
-    prevBtn.onclick=()=>{if(current>1){current--;showScenario(current);window.scrollTo({top:0,behavior:'smooth'});}};
-    nextBtn.onclick=()=>{if(current<total){current++;showScenario(current);window.scrollTo({top:0,behavior:'smooth'});}};
-
-    showScenario(current);
+    /* --- Navigation --- */
+    let current=1,total=scenarios.length;const prevBtn=document.getElementById('prevBtn');const nextBtn=document.getElementById('nextBtn');
+    const show=scIdx=>{for(let k=1;k<=total;k++){document.getElementById(`scenario${k}`).style.display=k===scIdx?'block':'none';}prevBtn.disabled=scIdx===1;nextBtn.disabled=scIdx===total;};
+    prevBtn.onclick=()=>{if(current>1){current--;show(current);window.scrollTo({top:0,behavior:'smooth'});}};
+    nextBtn.onclick=()=>{if(current<total){current++;show(current);window.scrollTo({top:0,behavior:'smooth'});}};
+    show(current);
   </script>
 </body>
 </html>
